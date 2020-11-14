@@ -9,8 +9,8 @@ class String():
         self.operators = {'+':(1, lambda x,y: x + y),
                           '-':(1, lambda x,y: x - y),  
                           '*':(2, lambda x,y: x * y),
-                          '/':(2, lambda x,y: x * y),
-                          '%':(2, lambda x,y: x * y),
+                          '/':(2, lambda x,y: x / y),
+                          '%':(2, lambda x,y: x % y),
                           '^':(3, lambda x,y: x ** y)}
 
 
@@ -222,8 +222,8 @@ class Expression_summarize(String):
                     num = ''
                 if i in self.operators or i in '()':
                     yield i
-                if num:
-                    yield int(num)
+            if num:
+                yield int(num)
 
         def stack_pol(equasion):
             stack = []
@@ -281,6 +281,7 @@ def cycle():
             elif state == False:
                 stri = Expression_summarize(stri,global_expression)
                 print(stri)
+                global_expression = []
             else:
                 pass
         else:
