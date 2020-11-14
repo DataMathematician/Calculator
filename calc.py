@@ -176,7 +176,7 @@ class Expression(String):
                         except:
                             if expression[0] == '(': #если первый символ в вводе "("
                                 compile(expression,'<string>','exec')
-                                sglobal_expression.append(expression)
+                                global_expression.append(expression)
                             else:
                                 raise Exception()
     
