@@ -34,7 +34,7 @@ class Expression_summarize(String):
             Операция сохранения значения в стек и вывод из стека.
             Поддерживает + - * / % ^ () унарный минус(~) и унарный плюс(!)
             '''
-            if i in self.operators or i in '()' or num in self.operators: # or num in self.operators:  # если это оператор или () или sin/cos
+            if i in self.operators or i in '()' or num in self.operators: # если это оператор или () или sin/cos
                 if num in self.operators:
                     i = num
                 if i == '(':
@@ -143,17 +143,6 @@ class Expression_summarize(String):
                             solution_stack.append(token)
             return str(solution_stack[0])
                 
-
-
-
-        
-            
-               
-
-
-
-
-
         output = translate(global_expression)
         print(output)
         rez = result(output)

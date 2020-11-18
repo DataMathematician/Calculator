@@ -39,14 +39,11 @@ class String():
             self.error_message = "Выражение может начинаться с '+','-' или числа. Позиция: {}".format(i)
             self.error = True   
         elif n_error == 3:
-            self.error_message = "Выражение не может быть вычислено"
+            self.error_message = "Выражение не может быть дополнено"
             self.error = True   
         elif n_error == 4:
             self.error_message = "Выражение не может быть дополнено, нет связующего знака"
-            self.error = True
-        elif n_error == 5: 
-            self.error_message = ""
-            self.error = True     
+            self.error = True  
 
     def __str__(self):
         print(self.expression)
@@ -89,28 +86,28 @@ class Expression(String):
                 Если после "(" ")" , то возбужденое ошибки
                 Если после ")" "(" , то возбужденое ошибки
             '''
-            if expression == '(' or expression == ')':
-                raise Exception()
-            elif expression.count('(') != expression.count(')'):
-                raise Exception()
-            elif len(expression) == expression.count('(') + expression.count(')'):
-                raise Exception()
-            for i,let in enumerate(expression):
-                try:
-                    prev = int(expression[i-1])
-                except:
-                    prev = ''
-                try:
-                    exp = expression[i+1]
-                except:
-                    exp = expression[-1]
-                if let == '(' and type(prev) == type(0) and prev >= 0:
+                if expression == '(' or expression == ')':
                     raise Exception()
-                elif let == '(' and exp == ')':
+                elif expression.count('(') != expression.count(')'):
                     raise Exception()
-                elif let == ')' and exp == '(':
+                elif len(expression) == expression.count('(') + expression.count(')'):
                     raise Exception()
-        
+                for i,let in enumerate(expression):
+                    try:
+                        prev = int(expression[i-1])
+                    except:
+                        prev = ''
+                    try:
+                        exp = expression[i+1]
+                    except:
+                        exp = expression[-1]
+                    if let == '(' and type(prev) == type(0) and prev >= 0:
+                        raise Exception()
+                    elif let == '(' and exp == ')':
+                        raise Exception()
+                    elif let == ')' and exp == '(':
+                        raise Exception()
+            
         def check_repetitive_operations(expression):
             '''
             Две операции подряд не допускаются "-+", "*%", ...
@@ -199,13 +196,13 @@ class Expression(String):
             check_repetitive_operations(self.expression)
             check2ways(self.expression,self.global_expression)
         except:
-            self.errors(3)
+            self.errors(err)
            
     def __str__(self):
         if self.error == True:
             return "Expression: {} ; Error: {}".format(self.expression,self.error_message)
         
-class Expression_summarize(String):
+class ExpressionSummarize(String):
     def __init__(self,expression,global_expression): 
         super().__init__(expression,global_expression)
     
@@ -333,7 +330,7 @@ def cycle():
         print(global_expression)
         expression = input("Enter expression: ")
         stri = String(expression,global_expression) # получает выражение
-        stri, _type = stri.check_string() # убирает пробелы, узнает, выражение\комманда
+        stri, _type = stri.check_string() # убирает пробелы, узнает - выражение\комманда
         
         if _type == 'Command':
             stri = Command(stri,global_expression)
@@ -341,7 +338,7 @@ def cycle():
             if state == True:
                 q = True
             elif state == False:
-                stri = Expression_summarize(stri,global_expression)
+                stri = ExpressionSummarize(stri,global_expression)
                 stri.get_result(global_expression)
                 print(stri)
                 global_expression = []
