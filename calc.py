@@ -351,4 +351,6 @@ def cycle():
                 print(stri) # ошибка, вернется в начало
             except:
                 pass     
-cycle()
+
+if __name__ == "__main__":
+    cycle()
