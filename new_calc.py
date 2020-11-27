@@ -34,9 +34,8 @@ class Commands():
 
 if __name__ == "__main__":
     calculator = Calculator()
-    #calculator.main()
     while calculator.q == False:
-        print(calculator.global_expression)
+        print('Current expression:',calculator.global_expression)
         ex = Inp_Strinig(input('Ex: '))
         ex.replace_spaces()
         way = ex.choose.choose_way()
@@ -59,41 +58,6 @@ if __name__ == "__main__":
                 calculator.memory = cmd.cmd_MR.execute_command()
             elif ex.expression == '=':
                 calculator.result,calculator.global_expression = cmd.cmd_EQUAL.execute_command()
-                #print(calculator.global_expression)
-                
             
         elif way == 'Expression':
             calculator.global_expression.append(ex.expression)
-
-
-
-#def main(self):
-    #""" Основная логика работы калькулятора """
-    #while self.q == False:
-    #    ex = Inp_Strinig(input('Ex: '))
-    #    ex.replace_spaces()
-    #    way = ex.choose.choose_way()
-    #    if way == 'Command':
-    #        if ex.expression == 'C':
-    #            self.global_expression = self.cmd_C.execute_command()
-    #            #self.global_expression = ex.cmd.execute_command(self.global_expression)
-    #        
-    #        
-    #    elif way == 'Expression':
-    #        self.global_expression.append(ex.expression)
-
-            #expression = input('Ex: ') # получаем введенное выражение
-
-            #decision = Choose(expression)
-            #decision = decision.choose_way()
-    #
-            #if decision == 'Command': # если введенное выражение - комманда
-            #    try:
-            #        command_obj = Commands(expression)
-            #        command_obj.execute_command()
-            #    except :
-            #        self.global_expression = []
-            #elif  decision == 'Expression': # если введенное выражение - выражение (5-32*2, 4, %,...)
-            #    expression = expression.replace(' ','')
-            #    self.global_expression.append(expression)
-            #    print(self.global_expression)

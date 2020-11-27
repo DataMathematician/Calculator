@@ -1,5 +1,3 @@
-#from commands import Commands
-
 class Choose():
     def __init__(self,expression):
         self.expression = expression

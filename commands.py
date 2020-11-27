@@ -81,11 +81,6 @@ class EQUAL():
         print('Rez: ',result)
         return result,self.global_expression
 
-class Call():
-    def __init__(self):
-        self.state = State()
-
-
 def last_int(global_expression):
     '''
     Берет последнее число из кеша

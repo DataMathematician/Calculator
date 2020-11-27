@@ -1,10 +1,12 @@
 import operators
+import string
 
 class State:
     '''текущее состояние анализатора'''
     state_handlers = {
-        's_open': ('h_open', 'h_num','h_uno_op'), # начальное состояние  (открывающая скобка либо число)
+        's_open': ('h_open', 'h_num','h_uno_op','h_tgm'), # начальное состояние  (открывающая скобка либо число)
         's_close': ('h_close', 'h_op'), # состояние (закрывающая скобка либо операция)
+        's_tgm': ('h_open',)
     }
 
     state_map = {
@@ -12,23 +14,24 @@ class State:
         'h_num': 's_close',
         'h_op': 's_open',
         'h_close': 's_close',
-        'h_uno_op':'s_open'
+        'h_uno_op':'s_open',
+        'h_tgm':'s_tgm'
     }
 
     def __init__(self, expr):
         self.src = ''.join(expr) # разбираемая строка 
         self.mode = 's_open' # первичное состояние 
         self.pos = 0 # текущая позиция в строке
-        self.priority = 0 #! текущий приоритет
-        self.max_priority = 0 #! максимальный приоритет
         self.parsed = [] # список разобранных элементов # str ""
         self.out = []
         self.opers = []
 
     def parse(self):
-        #self.parsed = []
         while self.pos < len(self.src): # пробеагаемся по каждому символу
             ok = False
+            print(self.src[self.pos])
+            print(len(self.src))
+            print('pos:',self.pos)
             for handler_name in State.state_handlers[self.mode]: # при нынешнем состоянии для каждого возможного символа пробуем выполнить его класс 
                 handler = Handler.getHandler(handler_name) # берем класс возможного состояния
                 ok = handler.parse(self) # выполняем его метод parse
@@ -38,9 +41,11 @@ class State:
                     break
             if not ok:     # если ни один метод состояния не сработал, то заканчиваем работу
                 break
-        #if len(self.parsed) != 0:
+
         while len(self.parsed) != 0:
-            self.out.append(self.parsed.pop())
+            item = self.parsed.pop()
+            if item not in '()':
+                self.out.append(item)
         return self.out
 
 
@@ -60,10 +65,7 @@ class Out_list():
                     q = True
                 else:
                     state.out.append(op)
-            #except:
-                #print("Скобки не совпадают")
-                #raise Exception()
-        elif handler_name == 'h_op' or handler_name == 'h_uno_op':
+        else: 
                 q = False
                 while q == False:
                     op_last = state.parsed[-1]
@@ -94,8 +96,10 @@ class Handler:
             return CloseHandler()
         elif name == 'h_uno_op':
             return UnoOperation()
-
-        return None
+        elif name == 'h_tgm':
+            return TgmHandler()
+        print('Невозможно вычислить!')
+        raise Exception()
 
     def parse(self, state):
         result = False
@@ -119,25 +123,20 @@ class UnoOperation(Handler):
             print(char)
             self.value = char
             return True
-        
         return False
 
 
 class OpenHandler(Handler):
     def check(self, char, state):
         if char == '(':
-            state.priority += 1
             self.value = '('
             return True
-
         return False
 
 class CloseHandler(Handler):
     def check(self, char, state):
         if char == ')':
-            state.priority -= 1
             return True
-
         return False
 
 class OpHandler(Handler):
@@ -152,34 +151,13 @@ class NumHandler(Handler):
         if char in '0123456789':
             self.value += char
             return True
-
         return False
 
-#class RPNBuilder:
-#    @staticmethod
-#    def build(data, max_priority):
-#        while max_priority >= 0:
-#            i = 0
-#            while i < len(data):
-#                (op, priority) = data[i]
-#                if priority == max_priority:
-#                    left = data[i - 1]
-#                    right = data[i + 1]
-#                    data[i - 1] = left + ' ' + right + ' ' + op
-#                    del data[i : i + 2]
-#                else:
-#                    i += 2
-#            max_priority -= 1
-#
-#        return data[0]
-
-#state = State('2-(-3+4*1+3)') #128*(3+64)-1
-#state.parse()
-
-#print(RPNBuilder.build(state.parsed, state.max_priority))
-
-
-
-#state = State(expr)
-#state.parse()
-#return result
+class TgmHandler(Handler):
+    '''Комбинирует буквы в литерал (sin,cos),
+    на данном этапе необязательно триганометрический'''
+    def check(self,char,state):
+        if char in list(string.ascii_lowercase):
+            self.value += char
+            return True
+        return False

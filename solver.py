@@ -19,7 +19,6 @@ class Resulter:
                 self.solution_stack =  Des_operations.solve_token(self.token,self.solution_stack)
         return self.solution_stack[0]
 
-
 class IsInt():
     @staticmethod
     def num(token):

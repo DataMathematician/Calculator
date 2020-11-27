@@ -82,6 +82,22 @@ class Open_Round_Br():
     def __init__(self):
         self.priority = -1
 
+class MSin():
+    def __init__(self,x=None):
+        self.x = x
+        self.priority = 5
+        self.n_nums = 1
+    def solve(self):
+        return sin(radians(self.x))
+
+class MCos():
+    def __init__(self,x=None):
+        self.x = x
+        self.priority = 5
+        self.n_nums = 1
+    def solve(self):
+        return cos(radians(self.x))        
+
 class Operations(): #можно убрать класс...
     all_operations = {'+': Plus(),
                       '-': Minus(),
@@ -91,4 +107,6 @@ class Operations(): #можно убрать класс...
                       '^': Pow(),
                       '!': Uno_Plus(),
                       '~': Uno_Minus(),
-                      '(': Open_Round_Br()}
+                      '(': Open_Round_Br(),
+                      'sin': MSin(),
+                      'cos': MCos()}
