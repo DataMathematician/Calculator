@@ -96,7 +96,17 @@ class MCos():
         self.priority = 5
         self.n_nums = 1
     def solve(self):
-        return cos(radians(self.x))        
+        return cos(radians(self.x))     
+
+class TripleMul():
+    def __init__(self,x = None,y = None,z = None):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.priority = 0
+        self.n_nums = 3
+    def solve(self):
+        return self.x * self.z + self.z * self.y
 
 class Operations(): #можно убрать класс...
     all_operations = {'+': Plus(),
@@ -109,4 +119,6 @@ class Operations(): #можно убрать класс...
                       '~': Uno_Minus(),
                       '(': Open_Round_Br(),
                       'sin': MSin(),
-                      'cos': MCos()}
+                      'cos': MCos(),
+                      '@':TripleMul(),
+                      '@@':TripleMul()}

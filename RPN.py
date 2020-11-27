@@ -5,17 +5,18 @@ class State:
     '''текущее состояние анализатора'''
     state_handlers = {
         's_open': ('h_open', 'h_num','h_uno_op','h_tgm'), # начальное состояние  (открывающая скобка либо число)
-        's_close': ('h_close', 'h_op'), # состояние (закрывающая скобка либо операция)
+        's_close': ('h_close', 'h_op','h_spec'), # состояние (закрывающая скобка либо операция)
         's_tgm': ('h_open',)
     }
 
     state_map = {
-        'h_open': 's_open',
-        'h_num': 's_close',
-        'h_op': 's_open',
-        'h_close': 's_close',
-        'h_uno_op':'s_open',
-        'h_tgm':'s_tgm'
+        'h_open': 's_open',   # (
+        'h_num': 's_close',   # 1,2,3,...
+        'h_op': 's_open',     # +,-,*,/,...
+        'h_close': 's_close', # )
+        'h_uno_op':'s_open',  # !,~
+        'h_tgm':'s_tgm',      # sin/cos
+        'h_spec':'s_open'     # @
     }
 
     def __init__(self, expr):
@@ -29,9 +30,6 @@ class State:
     def parse(self):
         while self.pos < len(self.src): # пробеагаемся по каждому символу
             ok = False
-            print(self.src[self.pos])
-            print(len(self.src))
-            print('pos:',self.pos)
             for handler_name in State.state_handlers[self.mode]: # при нынешнем состоянии для каждого возможного символа пробуем выполнить его класс 
                 handler = Handler.getHandler(handler_name) # берем класс возможного состояния
                 ok = handler.parse(self) # выполняем его метод parse
@@ -57,7 +55,6 @@ class Out_list():
         elif handler_name == 'h_open':
             pass
         elif handler_name == 'h_close':
-            #try:
             q = False
             while q == False:
                 op = state.parsed.pop()
